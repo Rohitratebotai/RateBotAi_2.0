@@ -15,14 +15,14 @@ export default function App() {
         {/* <Route path="/pricing" element={<Pricing />} /> */}
         {/* <Route path="/documentation" element={<Documentation />} /> */}
         {/* <Route path="/documentation/:slug" element={<ModuleDocumentation />} /> */}
-        {/* <Route path="/hero-preview" element={<HeroPreview />} /> */}
-        {/* {policyRoutes.map((route) => (
+        <Route path="/hero-preview" element={<HeroPreview />} />
+        {policyRoutes.map((route) => (
           <Route
             key={route.path}
             path={route.path}
             element={<PolicyPage data={route.data} />}
           />
-        ))} */}
+        ))}
       </Routes>
     </BrowserRouter>
   );

@@ -1,39 +1,86 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Check } from 'lucide-react';
 import { platformProducts } from '@/data/siteData';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { DashboardMockup } from '@/components/ui/DashboardMockup';
 import { AnchorButton } from '@/components/ui/Button';
 
+gsap.registerPlugin(ScrollTrigger);
+
+// How much extra scroll distance (px) the pin holds per tab step.
+// 4 products => 3 steps between them => (4 - 1) * STEP_DISTANCE total.
+const STEP_DISTANCE = 900;
+
 export function ProductsShowcase() {
   const [active, setActive] = useState(0);
   const product = platformProducts[active];
 
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Keep the latest `active` readable inside the ScrollTrigger
+  // callback without re-creating the trigger on every tab change.
+  const activeRef = useRef(active);
+  activeRef.current = active;
+
+  const stepCount = platformProducts.length - 1;
+  const totalScrollDistance = stepCount * STEP_DISTANCE;
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || stepCount <= 0) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    // With reduced motion, skip pinning/scrubbing entirely —
+    // the section just scrolls past showing the first product.
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: `+=${totalScrollDistance}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 1,
+        // Snap so the pin settles on a whole tab rather than
+        // leaving the user stuck between two tabs mid-scroll.
+        snap: {
+          snapTo: 1 / stepCount,
+          duration: 0.3,
+          ease: 'power1.inOut',
+        },
+        onUpdate: (self) => {
+          const index = Math.round(self.progress * stepCount);
+          if (index !== activeRef.current) {
+            setActive(index);
+          }
+        },
+      });
+    }, section);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [stepCount, totalScrollDistance]);
+
   return (
-    <section id="products" className="py-20 lg:py-28">
+    <section
+      ref={sectionRef}
+      id="products"
+      className="py-20 lg:py-28"
+    >
       <div className="container-px">
         <SectionHeading
           eyebrow="Products"
           title="One platform. Four connected products."
           subtitle="Explore each part of the RateBotAI ecosystem. Select a product to see what it does and how it looks."
         />
-
-        <div className="mt-12 flex flex-wrap justify-center gap-2">
-          {platformProducts.map((p, i) => (
-            <button
-              key={p.id}
-              onClick={() => setActive(i)}
-              className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
-                active === i
-                  ? 'bg-navy-900 text-white shadow-soft dark:bg-white dark:text-navy-900'
-                  : 'border border-canvas-line text-navy-600 hover:border-navy-300 hover:text-navy-900 dark:border-navy-700 dark:text-navy-200 dark:hover:border-navy-500 dark:hover:text-white'
-              }`}
-            >
-              {p.name}
-            </button>
-          ))}
-        </div>
 
         <div className="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="order-2 lg:order-1">

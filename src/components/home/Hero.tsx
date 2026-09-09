@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { hero } from '@/data/siteData';
 import { AnchorButton } from '@/components/ui/Button';
-import { DashboardMockup } from '@/components/ui/DashboardMockup';
+import DashboardMockupPMS from '../ui/DashboardMockupPMS';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -63,7 +63,7 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.4, ease }}
           className="mx-auto mt-16 max-w-5xl"
         >
-          <DashboardMockup active="dynamic-pricing" />
+          <DashboardMockupPMS />
         </motion.div>
       </div>
     </section>
