@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { hero } from '@/data/siteData';
 import { AnchorButton } from '@/components/ui/Button';
-import DashboardMockupPMS from '../ui/DashboardMockupPMS';
+import DashboardMockupCMS from '../ui/DashboardMockupCMS';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -13,7 +13,7 @@ export function Hero() {
       <div className="absolute inset-x-0 top-0 -z-10 h-[600px] bg-gradient-to-b from-canvas-subtle/60 to-transparent dark:from-navy-800/40" />
 
       <div className="container-px">
-        <div className="mx-auto max-w-4xl text-center">
+        {/* <div className="mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ export function Hero() {
               {hero.secondaryCta.label}
             </AnchorButton>
           </motion.div>
-        </div>
+        </div> */}
 
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.97 }}
@@ -63,7 +63,7 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.4, ease }}
           className="mx-auto mt-16 max-w-5xl"
         >
-          <DashboardMockupPMS />
+          <DashboardMockupCMS />
         </motion.div>
       </div>
     </section>

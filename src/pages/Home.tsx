@@ -14,7 +14,7 @@ import { Testimonials } from '@/components/home/Testimonials';
 import { FinalCTA } from '@/components/home/FinalCTA';
 import Reviews from '@/components/home/Reviews';
 import { OtaConnected } from '@/components/home/OtaConnected';
-import ProductShowcase from '@/components/home/ProductShowcase';
+// import ProductShowcase from '@/components/home/ProductShowcase';
 
 export function Home() {
 
@@ -23,7 +23,7 @@ export function Home() {
       <Navbar />
       <main>
         <Hero />
-        <ProductShowcase/>
+        {/* <ProductShowcase/> */}
         <OtaConnected />
         <TrustMetrics />
         <ProblemSection />
