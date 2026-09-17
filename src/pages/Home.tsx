@@ -8,7 +8,6 @@ import { PlatformOverview } from '@/components/home/PlatformOverview';
 import { DynamicPricingSection } from '@/components/home/DynamicPricingSection';
 import { DirectBookingSection } from '@/components/home/DirectBookingSection';
 import { IntegrationsSection } from '@/components/home/IntegrationsSection';
-import { WhyRateBotAI } from '@/components/home/WhyRateBotAI';
 import { HotelHighlights } from '@/components/home/HotelHighlights';
 import { Testimonials } from '@/components/home/Testimonials';
 import { FinalCTA } from '@/components/home/FinalCTA';
@@ -17,6 +16,8 @@ import { OtaConnected } from '@/components/home/OtaConnected';
 import ProductShowcase from '@/components/home/ScrollMockupShowcase';
 import InfiniteScrollHero from '@/components/hero/InfiniteScrollHero';
 import ThreeSlideScroll from '@/components/hero/ThreeSlides';
+import TrialComp from '@/components/trialComp/TrialComp';
+import TrialComp2 from '@/components/trialComp/TrialComp2';
 
 export function Home() {
 
@@ -24,13 +25,15 @@ export function Home() {
     <div className="relative min-h-screen bg-canvas overflow-x-hidden dark:bg-navy-900">
       <Navbar />
       <main>
-        <InfiniteScrollHero />
+        {/* <InfiniteScrollHero /> */}
         {/* <ThreeSlideScroll /> */}
+        <TrialComp2 />
+        <TrialComp />
         <section className="">
 
           {/* Your next section */}
           {/* <Hero /> */}
-          <ProductShowcase />
+          {/* <ProductShowcase /> */}
           <OtaConnected />
           <TrustMetrics />
           <ProblemSection />
@@ -39,12 +42,10 @@ export function Home() {
           <DynamicPricingSection />
           <DirectBookingSection />
           <IntegrationsSection />
-          <WhyRateBotAI />
           <HotelHighlights />
           <Testimonials />
           <Reviews />
           <FinalCTA />
-          next section
         </section>
 
 
