@@ -142,7 +142,6 @@ export function ModuleDocumentation() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

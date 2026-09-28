@@ -6,15 +6,20 @@ import { ModuleDocumentation } from '@/pages/documentation/ModuleDocumentation';
 import { HeroPreview } from '@/pages/HeroPreview';
 import { PolicyPage } from '@/components/policy/PolicyPage';
 import { policyRoutes } from '@/data/policyData';
+import { About } from './pages/About';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/pricing" element={<Pricing />} /> */}
-        {/* <Route path="/documentation" element={<Documentation />} /> */}
-        {/* <Route path="/documentation/:slug" element={<ModuleDocumentation />} /> */}
+        <Route path="/about" element={<About />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/documentation" element={<Documentation />} />
+        <Route path="/documentation/:slug" element={<ModuleDocumentation />} />
         <Route path="/hero-preview" element={<HeroPreview />} />
         {policyRoutes.map((route) => (
           <Route
@@ -24,6 +29,7 @@ export default function App() {
           />
         ))}
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

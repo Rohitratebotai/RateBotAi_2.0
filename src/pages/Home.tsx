@@ -18,15 +18,16 @@ import InfiniteScrollHero from '@/components/hero/InfiniteScrollHero';
 import ThreeSlideScroll from '@/components/hero/ThreeSlides';
 import TrialComp from '@/components/trialComp/TrialComp';
 import TrialComp2 from '@/components/trialComp/TrialComp2';
+import { MissionReveal } from '@/components/about/MissionReveal';
 
 export function Home() {
 
   return (
     <div className="relative min-h-screen bg-canvas overflow-x-hidden dark:bg-navy-900">
-      <Navbar />
+
       <main>
-        {/* <InfiniteScrollHero /> */}
-        {/* <ThreeSlideScroll /> */}
+        <InfiniteScrollHero />
+        <ThreeSlideScroll />
         <TrialComp2 />
         <TrialComp />
         <section className="">
@@ -34,6 +35,7 @@ export function Home() {
           {/* Your next section */}
           {/* <Hero /> */}
           {/* <ProductShowcase /> */}
+          <MissionReveal />
           <OtaConnected />
           <TrustMetrics />
           <ProblemSection />
@@ -48,9 +50,7 @@ export function Home() {
           <FinalCTA />
         </section>
 
-
       </main>
-      <Footer />
     </div >
   );
 }

@@ -963,22 +963,6 @@ const ThreeSlideHorizontal = () => {
           </div>
         ))}
       </section>
-
-      {/* ================================================
-          NEXT COMPONENT
-      ================================================= */}
-
-      <section className="flex h-screen items-center justify-center bg-white">
-        <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-navy-800/50">
-            Next Section
-          </p>
-
-          <h2 className="mt-4 text-5xl font-bold text-navy-800">
-            Continue Exploring
-          </h2>
-        </div>
-      </section>
     </>
   );
 };
