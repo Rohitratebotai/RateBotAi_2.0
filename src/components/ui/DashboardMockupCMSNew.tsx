@@ -669,7 +669,7 @@ export function DashboardMockupCMSNew({
   return (
     <div
       ref={dashboardRef}
-      className={`relative w-full overflow-visible ${className}`}
+      className={`relative w-full bg-black overflow-visible ${className}`}
     >
       {/* <FloatingActivityCard visible={compositionReady} />
       <FloatingInsightCard visible={compositionReady} /> */}
