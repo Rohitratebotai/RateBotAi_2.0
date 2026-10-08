@@ -29,13 +29,13 @@ export function Home() {
 
       <main>
         <InfiniteScrollHero />
-        {/* <ThreeSlideScroll /> */}
         <DashboardMockupCMSNew />
-        <TrialComp2 />
+        {/* <TrialComp2 /> */}
         <TrialComp />
         <section className="">
 
           {/* Your next section */}
+          {/* <ThreeSlideScroll /> */}
           {/* <Hero /> */}
           {/* <ProductShowcase /> */}
           <MissionReveal />
