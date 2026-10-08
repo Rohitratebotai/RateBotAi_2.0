@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import CMSChatMockup from "./CMSchatMockUp";
+import CMSChatMockup from "../ui/CMSChatMockup";
 
 interface DashboardMockupCMSNewProps {
   className?: string;
