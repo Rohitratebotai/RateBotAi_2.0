@@ -1022,7 +1022,7 @@ export function DashboardMockupBMS({
         {/*                         Booking Area                              */}
         {/* ================================================================= */}
 
-        <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.7fr)_minmax(300px,0.9fr)]">
+        <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-1">
           {/* Rooms */}
           <div>
             <motion.div
@@ -1067,10 +1067,10 @@ export function DashboardMockupBMS({
           </div>
 
           {/* Summary */}
-          <BookingSummary
+          {/* <BookingSummary
             items={summaryItems}
             isInView={isInView}
-          />
+          /> */}
         </div>
       </motion.div>
     </div>

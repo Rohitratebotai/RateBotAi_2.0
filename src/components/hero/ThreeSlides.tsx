@@ -1,6 +1,11 @@
+
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+import DashboardMockupCMS from "@/components/ui/DashboardMockupCMS";
+import DashboardMockupPMS from "@/components/ui/DashboardMockupPMS";
+import DashboardMockupBMS from "@/components/ui/DashboardMockupBMS";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,6 +40,18 @@ const slides: Slide[] = [
   },
 ];
 
+const mockupComponents = [
+  DashboardMockupCMS,
+  DashboardMockupBMS,
+  DashboardMockupPMS,
+];
+
+// Individual scale for each dashboard.
+// CMS is intentionally smaller because it has a larger intrinsic layout.
+const mockupScales = ["scale-[0.62]", "scale-[0.70]", "scale-[0.68]"];
+
+const features = ["Easy to use", "Scalable", "Real-time"];
+
 const ThreeSlideHorizontal = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -50,533 +67,270 @@ const ThreeSlideHorizontal = () => {
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      /*
-       * ==================================================
+      /* ==================================================
        * INITIAL SLIDE POSITIONS
-       * ==================================================
-       */
+       * ================================================== */
 
-      gsap.set(slidesRef.current, {
-        xPercent: 100,
-      });
+      gsap.set(slidesRef.current, { xPercent: 100 });
+      gsap.set(slidesRef.current[0], { xPercent: 0 });
 
-      gsap.set(slidesRef.current[0], {
-        xPercent: 0,
-      });
+      /* ==================================================
+       * INITIAL HIDDEN STATE: SLIDES 2 & 3 ONLY
+       * ================================================== */
 
-      /*
-       * ==================================================
-       * INITIAL LEFT CONTENT
-       * ==================================================
-       */
-
-      gsap.set(labelRef.current, {
+      gsap.set(labelRef.current.slice(1), {
         opacity: 0,
         x: -40,
         filter: "blur(8px)",
       });
 
-      gsap.set(titleRef.current, {
+      gsap.set(titleRef.current.slice(1), {
         opacity: 0,
         x: -50,
         filter: "blur(10px)",
       });
 
-      gsap.set(descriptionRef.current, {
+      gsap.set(descriptionRef.current.slice(1), {
         opacity: 0,
         x: -40,
         filter: "blur(8px)",
       });
 
-      gsap.set(featuresRef.current, {
+      gsap.set(featuresRef.current.slice(1), {
         opacity: 0,
         y: 25,
       });
 
-      gsap.set(buttonRef.current, {
+      gsap.set(buttonRef.current.slice(1), {
         opacity: 0,
         y: 25,
       });
 
-      /*
-       * ==================================================
-       * INITIAL RIGHT MOCKUPS
-       * ==================================================
-       */
-
-      gsap.set(mockupRef.current, {
+      gsap.set(mockupRef.current.slice(1), {
         opacity: 0,
         x: 100,
+        y: 0,
         scale: 0.88,
         rotateY: -8,
         filter: "blur(6px)",
+        transformOrigin: "center center",
+        force3D: true,
+      });
+
+      /* ==================================================
+       * OPTIONAL INTRO
+       * ================================================== */
+
+      gsap.from(contentRef.current[0], {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      /* ==================================================
+       * MAIN SCROLL TIMELINE
+       * ================================================== */
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: `+=${(slides.length - 1) * 100}%`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
       });
 
       /*
-       * ==================================================
-       * FIRST SLIDE ENTRANCE
-       * ==================================================
+       * Each transition:
+       * slide `i` exits at time `i`
+       * slide `i + 1` enters at time `i + 0.42`
        */
 
-      const firstSlide = gsap.timeline();
+      for (let i = 0; i < slides.length - 1; i++) {
+        const next = i + 1;
 
-      firstSlide
-        .to(labelRef.current[0], {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.5,
-          ease: "power3.out",
-        })
-        .to(
-          titleRef.current[0],
+        /* ---- Slide container movement ---- */
+
+        timeline.to(
+          slidesRef.current[i],
+          {
+            xPercent: -100,
+            ease: "none",
+          },
+          i
+        );
+
+        timeline.to(
+          slidesRef.current[next],
+          {
+            xPercent: 0,
+            ease: "none",
+          },
+          i
+        );
+
+        /* ---- Current slide content exits ---- */
+
+        timeline.to(
+          labelRef.current[i],
+          {
+            opacity: 0,
+            x: -35,
+            filter: "blur(6px)",
+            duration: 0.25,
+          },
+          i
+        );
+
+        timeline.to(
+          titleRef.current[i],
+          {
+            opacity: 0,
+            x: -45,
+            filter: "blur(8px)",
+            duration: 0.3,
+          },
+          i
+        );
+
+        timeline.to(
+          descriptionRef.current[i],
+          {
+            opacity: 0,
+            x: -35,
+            filter: "blur(6px)",
+            duration: 0.25,
+          },
+          i
+        );
+
+        timeline.to(
+          featuresRef.current[i],
+          {
+            opacity: 0,
+            y: -20,
+            duration: 0.25,
+          },
+          i
+        );
+
+        timeline.to(
+          buttonRef.current[i],
+          {
+            opacity: 0,
+            y: -20,
+            duration: 0.25,
+          },
+          i
+        );
+
+        /* ---- Current mockup exits ---- */
+
+        timeline.to(
+          mockupRef.current[i],
+          {
+            opacity: 0,
+            x: -100,
+            scale: 0.9,
+            rotateY: 8,
+            filter: "blur(6px)",
+            duration: 0.35,
+          },
+          i
+        );
+
+        /* ---- Next slide content enters ---- */
+
+        timeline.to(
+          labelRef.current[next],
           {
             opacity: 1,
             x: 0,
             filter: "blur(0px)",
-            duration: 0.65,
+            duration: 0.35,
             ease: "power3.out",
           },
-          "-=0.3"
-        )
-        .to(
-          descriptionRef.current[0],
+          i + 0.42
+        );
+
+        timeline.to(
+          titleRef.current[next],
           {
             opacity: 1,
             x: 0,
             filter: "blur(0px)",
-            duration: 0.55,
-            ease: "power3.out",
-          },
-          "-=0.35"
-        )
-        .to(
-          featuresRef.current[0],
-          {
-            opacity: 1,
-            y: 0,
             duration: 0.45,
             ease: "power3.out",
           },
-          "-=0.25"
-        )
-        .to(
-          buttonRef.current[0],
+          i + 0.5
+        );
+
+        timeline.to(
+          descriptionRef.current[next],
+          {
+            opacity: 1,
+            x: 0,
+            filter: "blur(0px)",
+            duration: 0.4,
+            ease: "power3.out",
+          },
+          i + 0.58
+        );
+
+        timeline.to(
+          featuresRef.current[next],
           {
             opacity: 1,
             y: 0,
-            duration: 0.45,
+            duration: 0.35,
             ease: "power3.out",
           },
-          "-=0.3"
-        )
-        .to(
-          mockupRef.current[0],
+          i + 0.65
+        );
+
+        timeline.to(
+          buttonRef.current[next],
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.35,
+            ease: "power3.out",
+          },
+          i + 0.72
+        );
+
+        /* ---- Next mockup enters ---- */
+
+        timeline.to(
+          mockupRef.current[next],
           {
             opacity: 1,
             x: 0,
             scale: 1,
             rotateY: 0,
             filter: "blur(0px)",
-            duration: 1,
+            duration: 0.7,
             ease: "power3.out",
           },
-          "-=0.8"
+          i + 0.42
         );
+      }
 
-      /*
-       * ==================================================
-       * MAIN SCROLL TIMELINE
-       * ==================================================
-       */
-
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-
-          start: "top top",
-
-          end: `+=${(slides.length - 1) * 100}%`,
-
-          scrub: 1,
-
-          pin: true,
-
-          anticipatePin: 1,
-
-          invalidateOnRefresh: true,
-        },
-      });
-
-      /*
-       * ==================================================
-       * SLIDE 1 → SLIDE 2
-       * ==================================================
-       */
-
-      timeline.to(
-        slidesRef.current[0],
-        {
-          xPercent: -100,
-          ease: "none",
-        },
-        0
-      );
-
-      timeline.to(
-        slidesRef.current[1],
-        {
-          xPercent: 0,
-          ease: "none",
-        },
-        0
-      );
-
-      /*
-       * Slide 1 content exits
-       */
-
-      timeline.to(
-        labelRef.current[0],
-        {
-          opacity: 0,
-          x: -35,
-          filter: "blur(6px)",
-          duration: 0.25,
-        },
-        0
-      );
-
-      timeline.to(
-        titleRef.current[0],
-        {
-          opacity: 0,
-          x: -45,
-          filter: "blur(8px)",
-          duration: 0.3,
-        },
-        0
-      );
-
-      timeline.to(
-        descriptionRef.current[0],
-        {
-          opacity: 0,
-          x: -35,
-          filter: "blur(6px)",
-          duration: 0.25,
-        },
-        0
-      );
-
-      timeline.to(
-        featuresRef.current[0],
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.25,
-        },
-        0
-      );
-
-      timeline.to(
-        buttonRef.current[0],
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.25,
-        },
-        0
-      );
-
-      /*
-       * Slide 1 mockup exits
-       */
-
-      timeline.to(
-        mockupRef.current[0],
-        {
-          opacity: 0,
-          x: -100,
-          scale: 0.9,
-          rotateY: 8,
-          filter: "blur(6px)",
-          duration: 0.35,
-        },
-        0
-      );
-
-      /*
-       * ==================================================
-       * SLIDE 2 CONTENT ENTER
-       * ==================================================
-       */
-
-      timeline.to(
-        labelRef.current[1],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        0.42
-      );
-
-      timeline.to(
-        titleRef.current[1],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.45,
-          ease: "power3.out",
-        },
-        0.5
-      );
-
-      timeline.to(
-        descriptionRef.current[1],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.4,
-          ease: "power3.out",
-        },
-        0.58
-      );
-
-      timeline.to(
-        featuresRef.current[1],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        0.65
-      );
-
-      timeline.to(
-        buttonRef.current[1],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        0.72
-      );
-
-      /*
-       * Slide 2 mockup enters
-       */
-
-      timeline.to(
-        mockupRef.current[1],
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          rotateY: 0,
-          filter: "blur(0px)",
-          duration: 0.7,
-          ease: "power3.out",
-        },
-        0.42
-      );
-
-      /*
-       * ==================================================
-       * SLIDE 2 → SLIDE 3
-       * ==================================================
-       */
-
-      timeline.to(
-        slidesRef.current[1],
-        {
-          xPercent: -100,
-          ease: "none",
-        },
-        1
-      );
-
-      timeline.to(
-        slidesRef.current[2],
-        {
-          xPercent: 0,
-          ease: "none",
-        },
-        1
-      );
-
-      /*
-       * Slide 2 content exits
-       */
-
-      timeline.to(
-        labelRef.current[1],
-        {
-          opacity: 0,
-          x: -35,
-          filter: "blur(6px)",
-          duration: 0.25,
-        },
-        1
-      );
-
-      timeline.to(
-        titleRef.current[1],
-        {
-          opacity: 0,
-          x: -45,
-          filter: "blur(8px)",
-          duration: 0.3,
-        },
-        1
-      );
-
-      timeline.to(
-        descriptionRef.current[1],
-        {
-          opacity: 0,
-          x: -35,
-          filter: "blur(6px)",
-          duration: 0.25,
-        },
-        1
-      );
-
-      timeline.to(
-        featuresRef.current[1],
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.25,
-        },
-        1
-      );
-
-      timeline.to(
-        buttonRef.current[1],
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.25,
-        },
-        1
-      );
-
-      /*
-       * Slide 2 mockup exits
-       */
-
-      timeline.to(
-        mockupRef.current[1],
-        {
-          opacity: 0,
-          x: -100,
-          scale: 0.9,
-          rotateY: 8,
-          filter: "blur(6px)",
-          duration: 0.35,
-        },
-        1
-      );
-
-      /*
-       * ==================================================
-       * SLIDE 3 CONTENT ENTER
-       * ==================================================
-       */
-
-      timeline.to(
-        labelRef.current[2],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        1.42
-      );
-
-      timeline.to(
-        titleRef.current[2],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.45,
-          ease: "power3.out",
-        },
-        1.5
-      );
-
-      timeline.to(
-        descriptionRef.current[2],
-        {
-          opacity: 1,
-          x: 0,
-          filter: "blur(0px)",
-          duration: 0.4,
-          ease: "power3.out",
-        },
-        1.58
-      );
-
-      timeline.to(
-        featuresRef.current[2],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        1.65
-      );
-
-      timeline.to(
-        buttonRef.current[2],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-          ease: "power3.out",
-        },
-        1.72
-      );
-
-      /*
-       * Slide 3 mockup enters
-       */
-
-      timeline.to(
-        mockupRef.current[2],
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          rotateY: 0,
-          filter: "blur(0px)",
-          duration: 0.7,
-          ease: "power3.out",
-        },
-        1.42
-      );
-
-      /*
-       * ==================================================
+      /* ==================================================
        * CONTINUOUS MOCKUP FLOAT
-       * ==================================================
-       */
+       * ================================================== */
 
       mockupRef.current.forEach((mockup) => {
         gsap.to(mockup, {
@@ -587,6 +341,12 @@ const ThreeSlideHorizontal = () => {
           ease: "sine.inOut",
         });
       });
+
+      /* Refresh ScrollTrigger once layout is settled. */
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
     }, section);
 
     return () => {
@@ -595,42 +355,33 @@ const ThreeSlideHorizontal = () => {
   }, []);
 
   return (
-    <>
-      {/* ================================================
-          PRODUCT SHOWCASE
-      ================================================= */}
+    <section
+      ref={sectionRef}
+      className="
+        relative h-screen w-full overflow-hidden
+        bg-canvas text-navy-900
+        dark:bg-navy-900 dark:text-white
+      "
+    >
+      {slides.map((slide, index) => {
+        const Mockup = mockupComponents[index];
 
-      <section
-        ref={sectionRef}
-        className="relative h-screen w-full overflow-hidden bg-white"
-      >
-        {slides.map((slide, index) => (
+        return (
           <div
             key={slide.id}
             ref={(element) => {
-              if (element) {
-                slidesRef.current[index] = element;
-              }
+              if (element) slidesRef.current[index] = element;
             }}
             className="
-              absolute
-              inset-0
-              h-screen
-              w-full
-              bg-navy-800/60
+              absolute inset-0 h-screen w-full
+              bg-canvas
+              dark:bg-navy-900
             "
           >
             <div
               className="
-                mx-auto
-                flex
-                h-full
-                w-full
-                max-w-7xl
-                items-center
-                px-6
-                md:px-10
-                lg:px-16
+                mx-auto flex h-full w-full max-w-[86rem]
+                items-center px-6 md:px-10 lg:px-16
               "
             >
               {/* ==========================================
@@ -639,9 +390,7 @@ const ThreeSlideHorizontal = () => {
 
               <div
                 ref={(element) => {
-                  if (element) {
-                    contentRef.current[index] = element;
-                  }
+                  if (element) contentRef.current[index] = element;
                 }}
                 className="w-full md:w-1/2 md:pr-10 lg:pr-16"
               >
@@ -649,17 +398,13 @@ const ThreeSlideHorizontal = () => {
 
                 <p
                   ref={(element) => {
-                    if (element) {
-                      labelRef.current[index] = element;
-                    }
+                    if (element) labelRef.current[index] = element;
                   }}
                   className="
-                    mb-5
-                    text-sm
-                    font-semibold
-                    uppercase
+                    mb-5 text-sm font-semibold uppercase
                     tracking-[0.25em]
-                    text-navy-800
+                    text-navy-500
+                    dark:text-navy-300
                   "
                 >
                   {slide.label}
@@ -669,18 +414,14 @@ const ThreeSlideHorizontal = () => {
 
                 <h2
                   ref={(element) => {
-                    if (element) {
-                      titleRef.current[index] = element;
-                    }
+                    if (element) titleRef.current[index] = element;
                   }}
                   className="
-                    max-w-xl
-                    text-4xl
-                    font-bold
-                    leading-tight
-                    text-white
+                    max-w-xl text-4xl font-bold leading-tight
+                    text-navy-900
                     md:text-5xl
                     lg:text-6xl
+                    dark:text-white
                   "
                 >
                   {slide.title}
@@ -690,17 +431,13 @@ const ThreeSlideHorizontal = () => {
 
                 <p
                   ref={(element) => {
-                    if (element) {
-                      descriptionRef.current[index] = element;
-                    }
+                    if (element) descriptionRef.current[index] = element;
                   }}
                   className="
-                    mt-6
-                    max-w-lg
-                    text-base
-                    leading-7
-                    text-white/70
+                    mt-6 max-w-lg text-base leading-7
+                    text-navy-500
                     md:text-lg
+                    dark:text-navy-200
                   "
                 >
                   {slide.description}
@@ -710,82 +447,52 @@ const ThreeSlideHorizontal = () => {
 
                 <div
                   ref={(element) => {
-                    if (element) {
-                      featuresRef.current[index] = element;
-                    }
+                    if (element) featuresRef.current[index] = element;
                   }}
                   className="mt-8 flex flex-wrap gap-3"
                 >
-                  <span
-                    className="
-                      rounded-full
-                      border
-                      border-white/15
-                      bg-navy-800/40
-                      px-4
-                      py-2
-                      text-sm
-                      text-white/80
-                      backdrop-blur-sm
-                    "
-                  >
-                    Easy to use
-                  </span>
-
-                  <span
-                    className="
-                      rounded-full
-                      border
-                      border-white/15
-                      bg-navy-800/40
-                      px-4
-                      py-2
-                      text-sm
-                      text-white/80
-                      backdrop-blur-sm
-                    "
-                  >
-                    Scalable
-                  </span>
-
-                  <span
-                    className="
-                      rounded-full
-                      border
-                      border-white/15
-                      bg-navy-800/40
-                      px-4
-                      py-2
-                      text-sm
-                      text-white/80
-                      backdrop-blur-sm
-                    "
-                  >
-                    Real-time
-                  </span>
+                  {features.map((feature) => (
+                    <span
+                      key={feature}
+                      className="
+                        rounded-full
+                        border border-canvas-line
+                        bg-canvas-subtle
+                        px-4 py-2
+                        text-sm
+                        font-medium
+                        text-navy-700
+                        shadow-sm
+                        backdrop-blur-sm
+                        dark:border-navy-700
+                        dark:bg-navy-800/70
+                        dark:text-navy-100
+                      "
+                    >
+                      {feature}
+                    </span>
+                  ))}
                 </div>
 
                 {/* Button */}
 
                 <button
                   ref={(element) => {
-                    if (element) {
-                      buttonRef.current[index] = element;
-                    }
+                    if (element) buttonRef.current[index] = element;
                   }}
                   className="
-                    mt-8
-                    rounded-full
-                    bg-white
-                    px-6
-                    py-3
-                    text-sm
-                    font-semibold
-                    text-navy-800
-                    transition-all
-                    duration-300
+                    mt-8 rounded-full
+                    bg-navy-900
+                    px-6 py-3
+                    text-sm font-semibold
+                    text-white
+                    shadow-lg shadow-navy-900/10
+                    transition-all duration-300
                     hover:-translate-y-1
                     hover:shadow-xl
+                    dark:bg-white
+                    dark:text-navy-900
+                    dark:shadow-black/20
                   "
                 >
                   Explore Platform
@@ -796,175 +503,43 @@ const ThreeSlideHorizontal = () => {
                   RIGHT MOCKUP
               ========================================== */}
 
-              <div className="hidden w-1/2 items-center justify-center pl-8 md:flex lg:pl-12">
+              <div
+                className="
+                  hidden w-1/2 items-center justify-center
+                  pl-8 md:flex lg:pl-12
+                "
+              >
+                {/* GSAP animation wrapper */}
+
                 <div
                   ref={(element) => {
-                    if (element) {
-                      mockupRef.current[index] = element;
-                    }
+                    if (element) mockupRef.current[index] = element;
                   }}
-                  className="relative w-full max-w-2xl"
+                  className="
+                    relative flex w-full
+                    items-center justify-center
+                  "
                   style={{
                     perspective: "1000px",
+                    transformOrigin: "center center",
                   }}
                 >
-                  {/* Browser */}
+                  {/* Static scale wrapper */}
 
                   <div
-                    className="
-                      overflow-hidden
-                      rounded-2xl
-                      border
-                      border-navy-800/10
-                      bg-white
-                      shadow-[0_30px_80px_rgba(5,21,45,0.25)]
-                    "
+                    className={`origin-center ${mockupScales[index]}`}
                   >
-                    {/* Browser Header */}
-
-                    <div
-                      className="
-                        flex
-                        h-11
-                        items-center
-                        gap-2
-                        border-b
-                        border-navy-800/10
-                        bg-gray-50
-                        px-4
-                      "
-                    >
-                      <div className="h-3 w-3 rounded-full bg-navy-800/20" />
-
-                      <div className="h-3 w-3 rounded-full bg-navy-800/15" />
-
-                      <div className="h-3 w-3 rounded-full bg-navy-800/10" />
-
-                      <div
-                        className="
-                          ml-4
-                          h-5
-                          flex-1
-                          rounded-md
-                          bg-navy-800/5
-                        "
-                      />
-                    </div>
-
-                    {/* Dashboard */}
-
-                    <div className="p-5">
-                      {/* Header */}
-
-                      <div className="mb-5 flex items-center justify-between">
-                        <div>
-                          <div className="h-5 w-32 rounded bg-navy-800/15" />
-
-                          <div className="mt-2 h-3 w-48 rounded bg-navy-800/5" />
-                        </div>
-
-                        <div className="h-9 w-24 rounded-lg bg-navy-800/10" />
-                      </div>
-
-                      {/* Stats */}
-
-                      <div className="grid grid-cols-3 gap-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="
-                              rounded-xl
-                              border
-                              border-navy-800/5
-                              bg-navy-800/[0.03]
-                              p-4
-                            "
-                          >
-                            <div className="h-3 w-20 rounded bg-navy-800/10" />
-
-                            <div className="mt-3 h-7 w-16 rounded bg-navy-800/20" />
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Chart */}
-
-                      <div
-                        className="
-                          mt-5
-                          rounded-xl
-                          border
-                          border-navy-800/5
-                          bg-navy-800/[0.03]
-                          p-5
-                        "
-                      >
-                        <div className="mb-5 h-4 w-28 rounded bg-navy-800/15" />
-
-                        <div className="flex h-40 items-end gap-3">
-                          <div className="h-[35%] flex-1 rounded-t bg-navy-800/10" />
-
-                          <div className="h-[55%] flex-1 rounded-t bg-navy-800/15" />
-
-                          <div className="h-[45%] flex-1 rounded-t bg-navy-800/10" />
-
-                          <div className="h-[75%] flex-1 rounded-t bg-navy-800/20" />
-
-                          <div className="h-[65%] flex-1 rounded-t bg-navy-800/15" />
-
-                          <div className="h-[90%] flex-1 rounded-t bg-navy-800/25" />
-                        </div>
-                      </div>
-
-                      {/* Bottom Cards */}
-
-                      <div className="mt-5 grid grid-cols-2 gap-4">
-                        <div
-                          className="
-                            h-16
-                            rounded-xl
-                            border
-                            border-navy-800/5
-                            bg-navy-800/[0.03]
-                          "
-                        />
-
-                        <div
-                          className="
-                            h-16
-                            rounded-xl
-                            border
-                            border-navy-800/5
-                            bg-navy-800/[0.03]
-                          "
-                        />
-                      </div>
-                    </div>
+                    <Mockup />
                   </div>
-
-                  {/* Glow */}
-
-                  <div
-                    className="
-                      absolute
-                      -bottom-12
-                      -right-12
-                      -z-10
-                      h-48
-                      w-48
-                      rounded-full
-                      bg-navy-800/20
-                      blur-3xl
-                    "
-                  />
                 </div>
               </div>
             </div>
           </div>
-        ))}
-      </section>
-    </>
+        );
+      })}
+    </section>
   );
 };
 
 export default ThreeSlideHorizontal;
+

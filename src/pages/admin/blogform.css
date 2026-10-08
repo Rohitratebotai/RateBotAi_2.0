@@ -1,0 +1,36 @@
+/* BlogForm.css - Optional styling for React Quill */
+
+/* Customize the editor height */
+.ql-container {
+    min-height: 250px;
+    font-size: 16px;
+}
+
+.ql-editor {
+    min-height: 250px;
+}
+
+/* Customize placeholder color */
+.ql-editor.ql-blank::before {
+    font-style: normal;
+    color: #9ca3af;
+}
+
+/* Make sure the editor fits well with Tailwind */
+.ql-toolbar {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+    background-color: #f9fafb;
+}
+
+.ql-container {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+/* Focus state for better UX */
+.ql-container.ql-snow:focus-within {
+    border-color: #3b82f6;
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}

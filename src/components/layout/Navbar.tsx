@@ -5,15 +5,21 @@ import { Menu, Moon, Sun, X } from 'lucide-react';
 import { nav } from '@/data/siteData';
 import { useTheme } from '@/hooks/useTheme';
 import { AnchorButton } from '@/components/ui/Button';
+import logo from '@/assets/logo/logo.png'
+import logo1 from '@/assets/logo/RATEBOTAI PNG LOGO WITH WHITE-01.png'
 
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2.5" aria-label="RateBotAI home">
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy-900 text-white dark:bg-white dark:text-navy-900">
+      {/* <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy-900 text-white dark:bg-white dark:text-navy-900">
         <span className="text-lg font-extrabold leading-none">R</span>
       </span>
       <span className="text-[1.05rem] font-bold tracking-tight text-navy-900 dark:text-white">
         RateBot<span className="text-navy-400 dark:text-navy-300">AI</span>
+      </span> */}
+      <span className="flex items-center gap-2.5">
+        <img className="h-8 w-auto" src={logo} alt="Logo" />
+        <img className="h-8 w-auto" src={logo1} alt="Logo" />
       </span>
     </Link>
   );
@@ -24,7 +30,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${theme === 'dark' ? 'dark' : 'dark'} mode`}
       className="relative flex h-9 w-9 items-center justify-center rounded-full text-navy-700 transition-colors hover:bg-navy-50 dark:text-navy-200 dark:hover:bg-navy-800"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -70,16 +76,14 @@ export function Navbar() {
         className="fixed inset-x-0 top-0 z-50"
       >
         <div
-          className={`transition-all duration-300 ${
-            scrolled
-              ? 'border-b border-canvas-line bg-canvas/80 backdrop-blur-xl dark:border-navy-700 dark:bg-navy-900/80'
-              : 'border-b border-transparent bg-transparent'
-          }`}
+          className={`transition-all duration-300 ${scrolled
+            ? 'border-b border-canvas-line bg-canvas/80 backdrop-blur-xl dark:border-navy-700 dark:bg-navy-900/80'
+            : 'border-b border-transparent bg-transparent'
+            }`}
         >
           <nav
-            className={`container-px flex items-center justify-between transition-all duration-300 ${
-              scrolled ? 'h-16' : 'h-20'
-            }`}
+            className={`container-px flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-16' : 'h-20'
+              }`}
             aria-label="Primary"
           >
             <Logo />

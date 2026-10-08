@@ -19,6 +19,8 @@ import ThreeSlideScroll from '@/components/hero/ThreeSlides';
 import TrialComp from '@/components/trialComp/TrialComp';
 import TrialComp2 from '@/components/trialComp/TrialComp2';
 import { MissionReveal } from '@/components/about/MissionReveal';
+import { AboutCTA } from '@/components/about';
+import DashboardMockupCMSNew from '@/components/ui/DashboardMockupCMSNew'
 
 export function Home() {
 
@@ -27,7 +29,8 @@ export function Home() {
 
       <main>
         <InfiniteScrollHero />
-        <ThreeSlideScroll />
+        {/* <ThreeSlideScroll /> */}
+        <DashboardMockupCMSNew />
         <TrialComp2 />
         <TrialComp />
         <section className="">
@@ -41,13 +44,14 @@ export function Home() {
           <ProblemSection />
           <PlatformOverview />
           {/* <ProductsShowcase /> */}
-          <DynamicPricingSection />
+          {/* <DynamicPricingSection /> */}
           <DirectBookingSection />
           <IntegrationsSection />
           <HotelHighlights />
-          <Testimonials />
+          {/* <Testimonials /> */}
           <Reviews />
-          <FinalCTA />
+          <AboutCTA />
+          {/* <FinalCTA /> */}
         </section>
 
       </main>

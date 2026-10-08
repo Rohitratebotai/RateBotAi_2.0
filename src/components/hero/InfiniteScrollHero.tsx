@@ -1246,7 +1246,7 @@ export default function InfiniteScrollHero() {
               gap-3
             "
           >
-            <button
+            {/* <button
               className="
                 group
                 flex
@@ -1288,7 +1288,7 @@ export default function InfiniteScrollHero() {
               "
             >
               Explore Products
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

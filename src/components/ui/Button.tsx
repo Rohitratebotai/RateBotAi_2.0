@@ -82,7 +82,7 @@ export function AnchorButton({
       {icon && <span className="shrink-0">{icon}</span>}
       {children}
       {iconRight && (
-        <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
+        <span className="shrink-0 py-2 transition-transform duration-300 group-hover:translate-x-0.5">
           {iconRight}
         </span>
       )}

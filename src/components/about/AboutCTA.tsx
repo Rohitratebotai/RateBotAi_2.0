@@ -63,7 +63,7 @@ export function AboutCTA() {
                 href="/#contact"
                 size="lg"
                 variant="secondary"
-                className="!border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50"
+                className="!border-white/30 py-2 !text-white hover:!bg-white/10 hover:!border-white/50"
               >
                 Talk to Us
               </AnchorButton>
